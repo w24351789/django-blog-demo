@@ -53,3 +53,20 @@ steps:
     testResultsFiles: "**/TEST-*.xml"
     testRunTitle: 'Python $(PYTHON_VERSION)'
   condition: succeededOrFailed()
+  
+- task: ArchiveFiles@2
+  displayName: 'Archive Application'
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Application/'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/Application$(Build.BuildId).zip'
+    replaceExistingArchive: true
+  
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publis Artifacts'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
